@@ -7,8 +7,8 @@ namespace DaDMapOverlay
     {
         private bool _isListeningForKey = false;
 
-        private string _resolution = "2560x1440";
-        public string Resolution
+        public event EventHandler GameResolutionChanged;
+        public string GameResolution
         {
             get
             {
@@ -24,49 +24,53 @@ namespace DaDMapOverlay
                         break;
                     }
                 }
-                _resolution = value;
+
+                ResolutionValue.SelectedIndex = 2;
+                GameResolutionChanged.Invoke(this, EventArgs.Empty);
             }
         }
 
-        private Keys _keybinding = Keys.M;
-        public Keys Keybinding
+        private Keys _overlayKeybinding = Keys.M;
+        public event EventHandler OverlayKeybindingChanged;
+        public Keys OverlayKeybinding
         {
             get
             {
-                return _keybinding;
+                return _overlayKeybinding;
             }
             set
             {
                 this.KeybindingValue.Text = value.ToString();
-                _keybinding = value;
+                _overlayKeybinding = value;
+                OverlayKeybindingChanged.Invoke(this, EventArgs.Empty);
             }
         }
 
-        private int _volume = 100;
+        public event EventHandler VolumeChanged;
         public int Volume
         {
             get
             {
-                return _volume;
+                return this.VolumeValue.Value;
             }
             set
             {
                 this.VolumeValue.Value = value;
-                _volume = value;
+                VolumeChanged.Invoke(this, EventArgs.Empty);
             }
         }
 
-        private int _overlayOpacity = 100;
+        public event EventHandler OverlayOpacityChanged;
         public int OverlayOpacity
         {
             get
             {
-                return _overlayOpacity;
+                return (int)OpacityValue.Value;
             }
             set
             {
                 this.OpacityValue.Value = value;
-                _overlayOpacity = value;
+                OverlayOpacityChanged.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -134,7 +138,7 @@ namespace DaDMapOverlay
             this.ResolutionLabel.Name = "ResolutionLabel";
             this.ResolutionLabel.Size = new System.Drawing.Size(120, 16);
             this.ResolutionLabel.TabIndex = 4;
-            this.ResolutionLabel.Text = "Screen Resolution:";
+            this.ResolutionLabel.Text = "Game Resolution:";
             // 
             // ResolutionValue
             // 
@@ -223,7 +227,7 @@ namespace DaDMapOverlay
                 // Ignore Mouse Button 1 (left button) and Mouse Button 2 (right button)
                 if (keyData != Keys.LButton && keyData != Keys.RButton)
                 {
-                    Keybinding = keyData;
+                    OverlayKeybinding = keyData;
                 }
 
                 _isListeningForKey = false;

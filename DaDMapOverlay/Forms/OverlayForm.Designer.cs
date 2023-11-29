@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -6,6 +7,8 @@ namespace DaDMapOverlay.Forms
 {
     partial class OverlayForm : Form
     {
+        public event EventHandler LastMousePositionChanged;
+
         private bool isDragging;
         private Point lastMousePosition;
 
@@ -136,6 +139,7 @@ namespace DaDMapOverlay.Forms
             if (e.Button == MouseButtons.Left)
             {
                 isDragging = false;
+                LastMousePositionChanged.Invoke(this, new EventArgs());
             }
         }
     }
